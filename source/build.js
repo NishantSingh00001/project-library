@@ -1,0 +1,10 @@
+const fs=require('fs');const cur=require('./curated.js');const auto=JSON.parse(fs.readFileSync('auto.json','utf8'));
+let total=0;
+const projects=cur.map(p=>{const a=auto[p.r];if(!a)throw new Error('no repo '+p.r);total+=a.loc;
+  let readme=a.readme; if(readme.length>14000) readme=readme.slice(0,14000).replace(/\n[^\n]*$/,'')+'\n\n*The full write-up continues in the repository README.*';
+  const ip='shots/'+p.id+'.webp';const img=fs.existsSync(ip)?'data:image/webp;base64,'+fs.readFileSync(ip).toString('base64'):'';
+  return Object.assign({},p,{img,files:a.files,loc:a.loc,langs:a.langs,tree:a.tree,date:a.date,readme});});
+const ids=new Set();projects.forEach(p=>{if(ids.has(p.id))throw new Error('dup '+p.id);ids.add(p.id)});
+const data=JSON.stringify({projects,totalLoc:total}).replace(/</g,'\\u003c');
+const html=fs.readFileSync('template.html','utf8').replace('/*DATA*/',()=>data);
+fs.writeFileSync('../index.html',html);console.log(projects.length,'projects',total,'loc',(html.length/1024|0)+'KB');
