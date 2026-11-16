@@ -17,3 +17,4 @@ Other notes:
 - The only browser storage used is a theme preference in `localStorage`.
 - `vercel.json` sets `X-Content-Type-Options`, `X-Frame-Options` and `Referrer-Policy`.
 - A gitleaks GitHub Action scans every push and pull request.
+- URL parameters (`role`, `tech`, `tag`) only filter the built-in project list. Their values are HTML-escaped before display and are never sent anywhere.

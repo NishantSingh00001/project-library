@@ -9,6 +9,18 @@ An Apple TV-style library of every project I've built. A 3D spotlight of top pro
 - The theme follows local time (light 06:30 to 18:30, dark otherwise). The clock at the top left switches it by hand.
 - Search runs in the browser over weighted fields (name, concepts, stack, description). Every word must match.
 
+## Tailored links
+
+Add URL parameters to open the library already filtered. The spotlight, shelves and grid all narrow to the matching projects, and the "View as" chips under the spotlight do the same thing with a click.
+
+| Parameter | Example | Effect |
+|---|---|---|
+| `role` | `?role=ai-engineer` | Projects relevant to a role. Known roles: `ai-engineer`, `ml-engineer`, `data-engineer`, `full-stack`, `backend`, `frontend`, `security`, `forward-deployed` (short forms such as `ml`, `sde`, `fde` work). Any other value is treated as a search. |
+| `tech` | `?tech=react,typescript` | Projects whose stack includes every listed technology. |
+| `tag` | `?tag=rag` | Projects matching a concept, using the same engine as the search box. |
+
+Parameters combine: `?role=ai-engineer&tech=react`. If nothing matches, the full library is shown with a note.
+
 ## Updating it
 
 Everything used to generate the page is in `source/`:
