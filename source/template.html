@@ -471,7 +471,7 @@ function shelf(title,list,id){
 }
 var ALLTOP=P.filter(function(p){return p.top}).sort(function(a,b){return a.top-b.top}),TOP=ALLTOP,VIEW=P,VSTATE={},VLABEL='';
 var libFilter='all';
-function hostOf(p){return /vercel\.app/.test(p.live)?'Vercel':/netlify\.app/.test(p.live)?'Netlify':'Code only'}
+function hostOf(p){return /vercel\.app/.test(p.live)?'Vercel':/netlify\.app/.test(p.live)?'Netlify':/onrender\.com/.test(p.live)?'Render':'Code only'}
 function renderBrowse(){
   var P=VIEW,custom=VSTATE.custom,h=(DB.locked||custom?'':viewBar());
   if(custom&&VSTATE.co)h+='<section class="pitch reveal"><p>'+esc(pitchFor(VSTATE.co,P))+'</p></section>';
@@ -484,7 +484,7 @@ function renderBrowse(){
   $('#browse').innerHTML=h;renderGrid();
 }
 function renderGrid(){var P=VIEW;
-  var opts=[['all','All']].concat(['Vercel','Netlify','Code only'].map(function(x){return [x,x]}));
+  var opts=[['all','All']].concat(['Vercel','Netlify','Render','Code only'].map(function(x){return [x,x]}));
   $('#filters').innerHTML=opts.map(function(o){var n=o[0]==='all'?P.length:P.filter(function(p){return hostOf(p)===o[0]}).length;return '<button data-f="'+o[0]+'" aria-pressed="'+(libFilter===o[0])+'">'+(o[0]==='all'?'All':o[0]==='Code only'?'Code only':'Live on '+o[0])+'<em>'+n+'</em></button>'}).join('');
   var list=P.filter(function(p){return libFilter==='all'||hostOf(p)===libFilter}).sort(function(a,b){return a.n.localeCompare(b.n)});
   $('#grid').innerHTML=list.map(function(p){return card(p)}).join('');
@@ -627,7 +627,7 @@ function md(src){
 }
 
 /* ---------- detail ---------- */
-var LANGC={JavaScript:'#f1c40f',TypeScript:'#3b82f6',HTML:'#f97316',CSS:'#a855f7',Python:'#22c55e',Java:'#ef4444',SQL:'#06b6d4',Jupyter:'#fb923c'};
+var LANGC={JavaScript:'#f1c40f',TypeScript:'#3b82f6',HTML:'#f97316',CSS:'#a855f7',Python:'#22c55e',Java:'#ef4444',SQL:'#06b6d4',Jupyter:'#fb923c',Go:'#00add8'};
 var ic=function(d){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>'};
 function openDetail(p){
   var D=$('#detail'),tot=p.langs.reduce(function(a,l){return a+l[1]},0)||1;

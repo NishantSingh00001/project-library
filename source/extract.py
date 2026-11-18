@@ -1,6 +1,6 @@
 import os,re,json,subprocess,sys,collections
 R='/home/claude/repos'
-EXT={'.js':'JavaScript','.jsx':'JavaScript','.mjs':'JavaScript','.ts':'TypeScript','.tsx':'TypeScript','.html':'HTML','.css':'CSS','.py':'Python','.java':'Java','.sql':'SQL','.ipynb':'Jupyter','.json':'JSON','.md':'Markdown','.toml':'Config','.yml':'Config','.yaml':'Config'}
+EXT={'.js':'JavaScript','.jsx':'JavaScript','.mjs':'JavaScript','.ts':'TypeScript','.tsx':'TypeScript','.html':'HTML','.css':'CSS','.py':'Python','.java':'Java','.sql':'SQL','.ipynb':'Jupyter','.json':'JSON','.md':'Markdown','.toml':'Config','.yml':'Config','.yaml':'Config','.go':'Go'}
 SKIP=('three.min.js','package-lock.json','.min.js','.bundle.js','.woff2','.png','.jpg','.jpeg','.webp','.svg','.ico','.pdf','.mp4','.bin','.gif')
 out={}
 for r in sorted(os.listdir(R)):
