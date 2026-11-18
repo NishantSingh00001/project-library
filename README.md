@@ -38,6 +38,18 @@ For links sent to a specific recruiter or company, `locked/<role>-<token>.html` 
 | Security Engineer | `/locked/security-b7gjqkag.html` |
 | Forward Deployed Engineer | `/locked/forward-deployed-7doo2oyh.html` |
 
+## Admin: one-off company links
+
+A small dot button next to the clock (top left) opens an admin panel, password-gated client-side (SHA-256 check, nothing sent anywhere). Once in, paste a job description and optionally a company/role name, and it builds a link like `/?custom=tessera,crossbridge,...&co=Acme+Corp` on the spot — no rebuild, no deploy.
+
+How it picks projects: entirely local keyword matching against each project's existing tags (`kw`, stack, category, kind) — no AI call, no network request. It scores every project by overlap with the pasted text and takes the top matches; if nothing scores, it falls back to a small general-purpose set rather than showing nothing. The "why these projects" paragraph above the spotlight is templated from the same data (the terms that are distinctive to the matched set, not just common ones like "React"), not freshly written per company.
+
+These links use the **same UI treatment** as the locked pages above — no "View as" switcher, no path to the rest of the library through the UI — but **not the same data guarantee**: they run on the normal `index.html`, so the full project data is still present in that page's source, just not shown. Good enough that a recruiter clicking through sees only the curated set; not something to rely on if the data itself must never be visible to a determined viewer. For that stronger guarantee, add a hand-picked entry to `source/locked.js` instead (ask Claude, or edit it directly) — that bakes a truly separate file the normal way.
+
+To change the admin password: hash a new passphrase (e.g. in a browser console, `await crypto.subtle.digest('SHA-256', new TextEncoder().encode('new-password')).then(b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''))`) and replace `ADMIN_HASH` in `source/template.html`.
+
+## Locked-link trust model
+
 These tokens are **obscurity, not real access control** — it's a static file anyone with the URL can open, the same trust level as an unlisted Google Doc link. They're not guessable or enumerable from the public site, but don't rely on them for anything that needs real authentication.
 
 To change which projects a role includes, edit the `ids` list for that role in `source/locked.js`, then rebuild. To invalidate every existing locked link at once (say, one leaked), change the `SALT` constant in `source/locked.js` and rebuild — every token changes and the old files are simply not regenerated (delete the `locked/` folder and rebuild to drop the stale ones).
