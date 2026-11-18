@@ -298,7 +298,7 @@ module.exports = [
  diff:'No account or backend: everything is in localStorage with a JSON backup to move between devices.',
  arch:['Income ledger (confidence levels)','Commitments','Reserve pots','Projection engine','Balance chart 14 / 30 / 60 days']},
 
-{id:'batchline',n:'Batchline',r:'batchline',col:['#eab308','#3f3f46'],live:'',
+{id:'batchline',n:'Batchline',r:'batchline',col:['#eab308','#3f3f46'],live:'https://batchline-eta.vercel.app',
  t:'A traceability workbench for micro-producers: which batches used this lot, and where did they go?',
  c:['mgmt'],k:'Traceability system',
  s:['Vanilla JS','Three.js','GSAP','localStorage','HTML','CSS'],
@@ -529,7 +529,7 @@ module.exports = [
  diff:'No build step and no framework: 1,480 lines by hand.',
  arch:['index.html','GSAP + ScrollTrigger + Lenis','GitHub API (live repos)','Netlify']},
 
-{id:'grimoire',n:'Grimoire',r:'grimoire',col:['#c79c50','#1a2f44'],
+{id:'grimoire',n:'Grimoire',r:'grimoire',col:['#c79c50','#1a2f44'],live:'https://grimoire-decode-link.vercel.app',
  t:'Paste a GitHub repo or website link; an AI model explains what it is and how it works, with diagrams.',
  c:['ai','tools'],k:'AI link explainer',
  s:['Vanilla JS','Canvas (animated backgrounds)','SVG (auto-laid-out diagrams)','Gemini','Groq','OpenRouter','OpenAI','Mistral','Anthropic Claude','localStorage'],
@@ -538,5 +538,27 @@ module.exports = [
  how:'A prompt sent to the provider and model you pick returns structured sections that get rendered into prose and laid out as SVG node-and-edge diagrams; every past decode is cached in localStorage so reopening one costs no extra request.',
  special:'Two full reading modes with their own atmosphere and vocabulary: "Wizard-born" (technical, starlit-library background) and "Muggle London" (plain-language, rainy-skyline background) — same result, two different explanations and diagrams.',
  diff:'Bring-your-own-key across six providers (Gemini, Groq, OpenRouter, OpenAI, Mistral, Anthropic) with the key kept only in the browser; genuinely zero backend, so it runs by just double-clicking index.html.',
- arch:['Paste a link','Pick provider + model (key stays in localStorage)','Provider API call (your key, direct)','Parse response into sections','Render prose + SVG architecture/flow diagrams','Cache the decode (Library)']}
+ arch:['Paste a link','Pick provider + model (key stays in localStorage)','Provider API call (your key, direct)','Parse response into sections','Render prose + SVG architecture/flow diagrams','Cache the decode (Library)']},
+
+{id:'northstar',n:'Northstar',r:'northstar-geofencing',live:'https://northstar-geofencing.vercel.app',col:['#0ea5a4','#0f172a'],
+ t:'Draw geofences on a map, move vehicles around, and get an instant alert the moment one crosses a zone.',
+ c:['sys','civic'],k:'Geofencing & real-time alert system',
+ s:['Go','PostgreSQL','PostGIS','Server-Sent Events','React','Vite','Leaflet','Docker Compose','Playwright'],
+ kw:['geofencing','geofence','real-time alerts','gis','postgis','location tracking','fleet tracking','vehicle tracking','point in polygon','server-sent events','sse','rest api','rate limiting'],
+ what:'Register vehicles, draw geofence polygons on a Leaflet map, move vehicles around (by hand or via the API), and watch a live alert stream fire the instant one enters or leaves a zone, with full violation history.',
+ how:'A Go backend does point-in-polygon geometry against PostGIS-backed geofences on every location update, persists state in PostgreSQL, and pushes alerts to the browser over Server-Sent Events rather than polling; the React/Vite console renders everything live on a Leaflet map.',
+ special:'Every response carries a `time_ns` timestamp and list endpoints get real `limit`/`offset` pagination and API-key auth with per-client rate limiting — the kind of detail a take-home brief asks for and most submissions skip.',
+ diff:'Shipped with actual test depth: unit tests on the geometry, an API test suite, a load test, and Playwright browser end-to-end tests — plus a Docker Compose setup and a published Docker Hub image, not just a local dev server.',
+ arch:['Vehicle location update','Go API: point-in-polygon vs PostGIS geofences','PostgreSQL (vehicles, geofences, violations)','SSE alert stream','React + Leaflet console']},
+
+{id:'pulse-traffic',n:'Pulse',r:'traffic-management-system',live:'https://traffic-management-system-2bwu.onrender.com',col:['#f59e0b','#1e293b'],
+ t:'An adaptive traffic-signal controller that re-times a 3×2 grid of intersections every cycle from live demand and weather — against a fixed-timing baseline, with phone sensors feeding in live potholes.',
+ c:['civic','sys'],k:'Adaptive traffic control system',
+ s:['Node.js (zero runtime dependencies)','node:http','node:test','Vanilla JS/CSS','Server-Sent Events'],
+ kw:['traffic management','adaptive traffic control','signal timing','traffic signal optimization','smart city','civic tech','webster\'s formula','simulation','pothole detection','route planning','challan','load testing','attack testing'],
+ what:'Simulates a small road network of intersections with tidal, time-of-day traffic demand, retiming each signal\'s cycle and green split every cycle with Webster\'s formula, adjusted for live weather, and compares it side by side against a classic fixed 90-second plan.',
+ how:'A pure, dependency-free core (`controller.js`) computes cycle length and NS/EW green split from queued demand and a weather-derived saturation-flow multiplier, with a hard safety invariant — no conflicting approaches ever show green together, and every phase change clears through yellow and all-red; a deterministic seeded simulator (`sim.js`) drives synthetic vehicles through it, while a phone-browser sensor page detects potholes from accelerometer spikes and reports them live.',
+ special:'A written safety invariant enforced by its own test file (no change may break "two conflicting approaches are never both non-red, and no green-to-green without clearance") plus a real attack-test and load-test pass as part of its definition of done, not just unit tests.',
+ diff:'Zero runtime dependencies end to end — Node built-ins only, no framework — plus a weather-adjusted, India-contextualized layer (₹ challan fines, live weather feed, phone pothole sensor) on top of the textbook Webster\'s-formula signal optimizer.',
+ arch:['Seeded vehicle simulation (sim.js)','Pure signal-timing core: Webster\'s formula + weather (controller.js)','Safety-gated phase scheduler (yellow/all-red clearance)','HTTP server + SSE live view (server.js)','Phone sensor: pothole + live traffic overlay']}
 ];
