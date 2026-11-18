@@ -59,7 +59,7 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;letter-spacing:-.022em;text-wrap
 .backdrop.on{opacity:.9}
 :root:not([data-mode="dark"]) .backdrop.on{opacity:.62}
 #gl{position:absolute;inset:0;width:100%;height:100%;z-index:-2;opacity:.75}
-.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,var(--bg) 0%,transparent 34%);background:
   linear-gradient(to right,color-mix(in srgb,var(--bg) 88%,transparent) 0%,color-mix(in srgb,var(--bg) 55%,transparent) 42%,transparent 75%),
   linear-gradient(to top,var(--bg) 0%,transparent 34%)}
 .waves{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:120px;z-index:-1;color:var(--bg)}
@@ -86,9 +86,9 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;letter-spacing:-.022em;text-wrap
 .btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:var(--shadow)}
 .btn:active{transform:scale(.97)}
 
-.stage{position:relative;height:min(46vw,420px);perspective:1500px;perspective-origin:30% 50%}
+.stage{position:relative;z-index:1;height:min(46vw,420px);-webkit-perspective:1500px;perspective:1500px;perspective-origin:30% 50%;touch-action:pan-y;-webkit-user-select:none;user-select:none}
 .s-card{position:absolute;left:0;top:50%;width:min(62%,560px);aspect-ratio:16/9;margin-top:calc(min(62%,560px)*-0.28);border-radius:22px;overflow:hidden;
-  transform-style:preserve-3d;transition:transform 1s cubic-bezier(.2,.85,.2,1),opacity 1s,filter 1s;box-shadow:0 40px 80px -30px rgba(0,0,0,.7);will-change:transform;background:#111 center/cover;cursor:pointer}
+  display:block;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-backface-visibility:hidden;backface-visibility:hidden;transition:transform 1s cubic-bezier(.2,.85,.2,1),opacity 1s,filter 1s;box-shadow:0 40px 80px -30px rgba(0,0,0,.7);will-change:transform;background:#111 center/cover;cursor:pointer}
 .s-card{background-position:top center}.s-card::before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8),transparent 40%)}.s-card::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);background:linear-gradient(115deg,rgba(255,255,255,.22),transparent 30%)}
 .s-card b{position:absolute;left:18px;bottom:14px;right:18px;color:#fff;font:800 clamp(18px,2.4vw,30px)/1.05 var(--display);letter-spacing:-.03em;text-shadow:0 2px 18px rgba(0,0,0,.6);z-index:1}
 .s-card .out{position:absolute;top:12px;right:12px;z-index:2;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#fff;background:rgba(0,0,0,.45);backdrop-filter:blur(8px);padding:6px 10px;border-radius:99px;opacity:0;transition:.3s}
@@ -265,6 +265,7 @@ pre{font:13px/1.55 var(--mono);background:var(--solid);border:1px solid var(--li
   .hero-in{padding:76px var(--gut) 84px;gap:22px}
   .stage{height:auto;aspect-ratio:16/10.5;max-height:46vh;width:100%}
   .s-card{width:80%;top:6%;margin-top:0;border-radius:16px}
+  .stage{-webkit-perspective:900px;perspective:900px}
   .copy h1{font-size:clamp(36px,11vw,60px);margin:10px 0 12px}
   .copy p{margin-bottom:14px}
   .pager{bottom:36px}.nav-arrow{bottom:26px}
@@ -507,7 +508,7 @@ document.addEventListener('pointerout',function(e){var el=e.target.closest&&e.ta
 
 /* ---------- spotlight cascade ---------- */
 var cur=0,timer,DUR=7000,stage=$('#stage'),flip=false;
-function buildSpot(){cur=0;stage.innerHTML=TOP.map(function(p,i){return '<div class="s-card" data-i="'+i+'" style="'+bg(p)+'"><span class="out">'+I.out+' Open live site</span><b>'+esc(p.n)+'</b></div>'}).join('');
+function buildSpot(){cur=0;stage.innerHTML=TOP.map(function(p,i){return '<a class="s-card" data-i="'+i+'" href="'+esc(p.live||'#'+p.id)+'"'+(p.live?' target="_blank" rel="noopener"':'')+' draggable="false" style="'+bg(p)+'"><span class="out">'+I.out+(p.live?' Open live site':' Deep dive')+'</span><b>'+esc(p.n)+'</b></a>'}).join('');
 $('#pager').innerHTML=TOP.map(function(p,i){return '<button data-i="'+i+'" aria-label="Spotlight '+esc(p.n)+'"></button>'}).join('')}
 var sx=null;stage.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});stage.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>40){stage.dataset.sw=1;go(cur+(dx<0?1:-1));setTimeout(function(){delete stage.dataset.sw},350)}});
 function place(){
@@ -528,10 +529,10 @@ function place(){
   if(window.__glTint)window.__glTint(p.col);
 }
 function go(i){cur=(i+TOP.length)%TOP.length;place();clearTimeout(timer);if(TOP.length>1)timer=setTimeout(function(){go(cur+1)},DUR)}
-stage.addEventListener('click',function(e){var c=e.target.closest('.s-card');if(!c||stage.dataset.sw)return;var i=+c.dataset.i;if(i===cur){var p=TOP[i];if(p.live){var a=document.createElement('a');a.href=p.live;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}else location.hash=p.id}else go(i)});
+stage.addEventListener('click',function(e){var c=e.target.closest('.s-card');if(!c)return;if(stage.dataset.sw){e.preventDefault();return}var i=+c.dataset.i;if(i!==cur){e.preventDefault();go(i)}});
 $('#pager').addEventListener('click',function(e){var b=e.target.closest('button');if(b)go(+b.dataset.i)});
 $('#next').onclick=function(){go(cur+1)};$('#prev').onclick=function(){go(cur-1)};
-var hero=$('.hero');hero.addEventListener('pointerenter',function(){hero.classList.add('paused');clearTimeout(timer)});hero.addEventListener('pointerleave',function(){hero.classList.remove('paused');go(cur)});
+var hero=$('.hero');hero.addEventListener('pointerenter',function(e){if(e.pointerType!=='mouse')return;hero.classList.add('paused');clearTimeout(timer)});hero.addEventListener('pointerleave',function(e){if(e.pointerType!=='mouse'||!hero.classList.contains('paused'))return;hero.classList.remove('paused');go(cur)});document.addEventListener('visibilitychange',function(){if(!document.hidden&&!hero.classList.contains('paused')&&!$('#intro'))go(cur)});
 
 
 /* ---------- Three.js ambient: a drifting field of points tinted by the spotlight ---------- */
