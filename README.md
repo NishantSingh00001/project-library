@@ -21,6 +21,27 @@ Add URL parameters to open the library already filtered. The spotlight, shelves 
 
 Parameters combine: `?role=ai-engineer&tech=react`. If nothing matches, the full library is shown with a note.
 
+This is a *soft* filter: the page still ships the data for every project, the "View as" chips can switch to any other role, and the search box reaches the whole library. It's for giving a link a head start, not for hiding anything.
+
+## Locked links
+
+For links sent to a specific recruiter or company, `locked/<role>-<token>.html` is a separate, standalone page that was built with **only** that role's projects baked in — not filtered client-side. The other projects' names, descriptions, screenshots and code links are not present in that file at all: no "View everything" chip, no search result, no page source that reveals the rest of the library. Each one gets a short random-looking token instead of a plain role name, so the URL alone doesn't announce what it is.
+
+| Role | Example |
+|---|---|
+| AI Engineer | `/locked/ai-engineer-xvksotyx.html` |
+| ML Engineer | `/locked/ml-engineer-s9cqrlg9.html` |
+| Data Engineer | `/locked/data-engineer-wrwps7uv.html` |
+| Full-stack Engineer | `/locked/full-stack-zfa8snhv.html` |
+| Backend Engineer | `/locked/backend-hwhr7msw.html` |
+| Frontend Engineer | `/locked/frontend-9a9cpr0g.html` |
+| Security Engineer | `/locked/security-b7gjqkag.html` |
+| Forward Deployed Engineer | `/locked/forward-deployed-7doo2oyh.html` |
+
+These tokens are **obscurity, not real access control** — it's a static file anyone with the URL can open, the same trust level as an unlisted Google Doc link. They're not guessable or enumerable from the public site, but don't rely on them for anything that needs real authentication.
+
+To change which projects a role includes, edit the `ids` list for that role in `source/locked.js`, then rebuild. To invalidate every existing locked link at once (say, one leaked), change the `SALT` constant in `source/locked.js` and rebuild — every token changes and the old files are simply not regenerated (delete the `locked/` folder and rebuild to drop the stale ones).
+
 ## Updating it
 
 Everything used to generate the page is in `source/`:
@@ -28,12 +49,13 @@ Everything used to generate the page is in `source/`:
 | File | Purpose |
 |---|---|
 | `curated.js` | Hand-written entry per project: tagline, categories, stack, search concepts, live URL, architecture |
+| `locked.js` | Role → curated project-id list + secret token, for the locked links above |
 | `auto.json` | File trees, line counts and READMEs extracted from each repo by `extract.py` |
 | `shots/` | Preview image per project, captured by `shoot.js` |
 | `template.html` | Page markup, styles and script |
-| `build.js` | Merges the above into `../index.html` |
+| `build.js` | Merges the above into `../index.html` and `../locked/*.html` |
 
-To add or edit a project, change `curated.js`, then run `cd source && node build.js`.
+To add or edit a project, change `curated.js`, then run `cd source && node build.js`. The same command regenerates every locked page too.
 
 ## Stack
 

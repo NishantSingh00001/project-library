@@ -430,7 +430,7 @@ var ALLTOP=P.filter(function(p){return p.top}).sort(function(a,b){return a.top-b
 var libFilter='all';
 function hostOf(p){return /vercel\.app/.test(p.live)?'Vercel':/netlify\.app/.test(p.live)?'Netlify':'Code only'}
 function renderBrowse(){
-  var P=VIEW,h=viewBar()+shelf(VLABEL?'Best matches':'Top picks',TOP);
+  var P=VIEW,h=(DB.locked?'':viewBar())+shelf(VLABEL?'Best matches':'Top picks',TOP);
   h+='<div class="group-h" id="by-type"><h2>Browse by type</h2><p>What each project is for.</p></div>';
   CATS.forEach(function(c){h+=shelf(c[1],P.filter(function(p){return p.c.indexOf(c[0])>-1}))});
   h+='<div class="group-h" id="by-tech"><h2>Browse by tech stack</h2><p>How each one is built.</p></div>';

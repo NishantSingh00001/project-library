@@ -527,5 +527,16 @@ module.exports = [
  how:'One index.html with GSAP, ScrollTrigger and Lenis and self-hosted fonts. It falls back to a saved list if the API is unavailable.',
  special:'New repos appear automatically.',
  diff:'No build step and no framework: 1,480 lines by hand.',
- arch:['index.html','GSAP + ScrollTrigger + Lenis','GitHub API (live repos)','Netlify']}
+ arch:['index.html','GSAP + ScrollTrigger + Lenis','GitHub API (live repos)','Netlify']},
+
+{id:'grimoire',n:'Grimoire',r:'grimoire',col:['#c79c50','#1a2f44'],
+ t:'Paste a GitHub repo or website link; an AI model explains what it is and how it works, with diagrams.',
+ c:['ai','tools'],k:'AI link explainer',
+ s:['Vanilla JS','Canvas (animated backgrounds)','SVG (auto-laid-out diagrams)','Gemini','Groq','OpenRouter','OpenAI','Mistral','Anthropic Claude','localStorage'],
+ kw:['ai agent','link explainer','url decoder','repo explainer','architecture diagram generator','flow diagram','bring your own key','byok','gemini','claude','gpt','llm app','code explainer','readme generator','no backend'],
+ what:'Drop in a repo or site URL and get back a written explanation of what it does and how it was built, plus an auto-generated architecture diagram and flow diagram.',
+ how:'A prompt sent to the provider and model you pick returns structured sections that get rendered into prose and laid out as SVG node-and-edge diagrams; every past decode is cached in localStorage so reopening one costs no extra request.',
+ special:'Two full reading modes with their own atmosphere and vocabulary: "Wizard-born" (technical, starlit-library background) and "Muggle London" (plain-language, rainy-skyline background) — same result, two different explanations and diagrams.',
+ diff:'Bring-your-own-key across six providers (Gemini, Groq, OpenRouter, OpenAI, Mistral, Anthropic) with the key kept only in the browser; genuinely zero backend, so it runs by just double-clicking index.html.',
+ arch:['Paste a link','Pick provider + model (key stays in localStorage)','Provider API call (your key, direct)','Parse response into sections','Render prose + SVG architecture/flow diagrams','Cache the decode (Library)']}
 ];

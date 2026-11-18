@@ -18,3 +18,4 @@ Other notes:
 - `vercel.json` sets `X-Content-Type-Options`, `X-Frame-Options` and `Referrer-Policy`.
 - A gitleaks GitHub Action scans every push and pull request.
 - URL parameters (`role`, `tech`, `tag`) only filter the built-in project list. Their values are HTML-escaped before display and are never sent anywhere.
+- Locked links (`locked/<role>-<token>.html`) are separate static pages built with only the included projects' data; the rest of the library is genuinely absent from that file, not hidden by CSS/JS. The token is obscurity (an unguessable, unlisted path), not authentication — treat a locked link like an unlisted doc link: fine to hand to one recipient, not a substitute for a real login. See the README's "Locked links" section for how tokens are generated and rotated.
